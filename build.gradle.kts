@@ -30,6 +30,8 @@ allprojects {
     val testContainersBom: String by project
     val protobufBom: String by project
     val jmh: String by project
+    val ehcache: String by project
+    val lombok: String by project
 
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
@@ -42,6 +44,8 @@ allprojects {
             dependency("com.google.guava:guava:$guava")
             dependency("org.openjdk.jmh:jmh-core:$jmh")
             dependency("org.openjdk.jmh:jmh-generator-annprocess:$jmh")
+            dependency("org.ehcache:ehcache:$ehcache")
+            dependency("org.projectlombok:lombok:$lombok")
         }
     }
 }
