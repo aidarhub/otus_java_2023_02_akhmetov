@@ -30,14 +30,17 @@ public class DbServiceClientImpl implements DBServiceClient {
     public Client saveClient(Client client) {
         return transactionManager.doInTransaction(session -> {
             var clientCloned = client.clone();
+            String stringId = String.valueOf(clientCloned.getId());
             if (client.getId() == null) {
-                var savedClient = clientDataTemplate.insert(session, clientCloned);
+                clientDataTemplate.insert(session, clientCloned);
+                cache.put(stringId, clientCloned);
                 log.info("created client: {}", clientCloned);
-                return savedClient;
+                return clientCloned;
             }
-            var savedClient = clientDataTemplate.update(session, clientCloned);
-            log.info("updated client: {}", savedClient);
-            return savedClient;
+            clientDataTemplate.update(session, clientCloned);
+            cache.put(stringId, clientCloned);
+            log.info("updated client: {}", clientCloned);
+            return clientCloned;
         });
     }
 
@@ -50,6 +53,7 @@ public class DbServiceClientImpl implements DBServiceClient {
             return transactionManager.doInReadOnlyTransaction(session -> {
                 var clientOptional = clientDataTemplate.findById(session, id);
                 log.info("client: {}", clientOptional);
+                clientOptional.ifPresent(c -> cache.put(Long.toString(id), c));
                 return clientOptional;
             });
         }
