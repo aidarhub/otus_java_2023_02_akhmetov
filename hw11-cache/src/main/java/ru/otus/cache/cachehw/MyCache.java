@@ -45,7 +45,9 @@ public class MyCache<K, V> implements HwCache<K, V> {
         for (var listener: listenerList) {
             try {
                 listener.notify(key, value, action);
-            } catch (Exception ignored) { }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
