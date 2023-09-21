@@ -15,6 +15,7 @@ findProject(":hw09-jdbc:homework")?.name = "homework"
 include("hw10-jpql")
 include("hw11-cache")
 include("hw12-web")
+include("hw13-depInj")
 
 pluginManagement {
     val jgitver: String by settings
